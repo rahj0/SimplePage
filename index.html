@@ -4,9 +4,28 @@
     <link rel="stylesheet" type="text/css" href="myStyle.css">
 </head>
 <body>
-    <h1 style="margin:0;" id="app">Rasmus</h1>
+    <h1 style="margin:0;" id="app">Rasmus1</h1>
 
 <ul id="example-2">
   <li><a class="active" >Home</a></li>
+  <li><a href="#news">Api Test</a></li>
 </ul>
 
+<script type="text/javascript">
+
+function handleClick() {
+   //alert("Direct Access: " + document.aye["whichThing"]);
+   //alert("Favorite weird creature: " + getRadioButtonValue(document.aye.whichThing));
+   return false; // prevent further bubbling of event
+}
+</script>
+
+<form onSubmit="return handleClick()">
+  First name:<br>
+  <input type="text" name="firstname" value="Mickey">
+  <br>
+  Last name:<br>
+  <input type="text" name="lastname" value="Mouse">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
