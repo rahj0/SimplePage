@@ -9,6 +9,52 @@ ul {
     top: 0;
 }
 
+.ul2 {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  float: left;
+  width: 95%; 
+  height:500px;
+  overflow:hidden; 
+  overflow-y:auto;
+}
+
+.container {
+
+  list-style-type: none;
+  border: 2px solid #1f6db6;
+  background-color: #636363;
+
+  width: 95%;
+  border-radius: 5px;
+  padding: 5px;
+  float: left;
+
+  margin: 10px 0;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.message {
+  width: 100%;
+  float: left;
+}
+
+.sender {
+  float: right;
+  padding: 0px 15px;
+  color: #aaa;
+}
+
 li {
     float: left;
 }
@@ -36,3 +82,20 @@ h1 {
   color: #f3f3f3;
   padding-bottom:20px;
 }
+* {
+    box-sizing: border-box;
+  }
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }

@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
     <link rel="stylesheet" type="text/css" href="myStyle.css">
+    <link rel="shortcut icon" href="">
 </head>
 <body>
-    <h1 style="margin:0;" id="app">Rasmus1</h1>
+    <h1 style="margin:0;" id="app">Rasmus</h1>
 
 <ul id="example-2">
   <li><a class="active" >Home</a></li>
@@ -13,19 +16,136 @@
 
 <script type="text/javascript">
 
-function handleClick() {
-   //alert("Direct Access: " + document.aye["whichThing"]);
-   //alert("Favorite weird creature: " + getRadioButtonValue(document.aye.whichThing));
-   return false; // prevent further bubbling of event
+var address = 'https://18.130.134.206'
+
+  function handleClick() {
+    if(document.getElementById('messageInput').value == "")
+    {
+      document.getElementById('sendMessageStatus').innerHTML = "Please enter message before trying to send it.";
+      return false;
+    }
+
+    document.getElementById('sendMessageStatus').innerHTML = "";
+    // 1. Create a new XMLHttpRequest object
+    let xhr = new XMLHttpRequest();
+
+    // 2. Configure it: GET-request for the URL /article/.../load
+    xhr.open('POST', address + '/api/LogItems/messages');
+
+    xhr.setRequestHeader('X-PINGOTHER', 'pingpong');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    // 3. Send the request over the network
+    xhr.send(JSON.stringify({
+    "name": document.getElementById('nameInput').value, "message": document.getElementById('messageInput').value }));
+    // 4. This will be called after the response is received
+    xhr.onload = function() {
+    if (xhr.status >= 300) { // analyze HTTP status of the response
+      document.getElementById('sendMessageStatus').innerHTML = `Error ${xhr.status}: ${xhr.statusText}`;
+    } else { // show the result
+      document.getElementById('sendMessageStatus').innerHTML = "Messaged saved.";
+      document.getElementById('messageInput').value = "";
+      handleReload();
+    }
+    };  
+
+    xhr.onerror = function() {
+      alert("Request failed!");
+    };
+
+    return false; // prevent further bubbling of event
+  }
+
+  function handleReload() {
+
+  // 1. Create a new XMLHttpRequest object
+  let xhr = new XMLHttpRequest();
+
+  // 2. Configure it: GET-request for the URL /article/.../load
+  xhr.open('GET', address + '/api/LogItems/messages');
+
+  xhr.setRequestHeader('X-PINGOTHER', 'pingpong');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  // 3. Send the request over the network
+  xhr.send(JSON.stringify());
+
+
+  function makeUL(array) {
+      if(array.length == 0)
+      {
+         return document.createTextNode('No messages yet!');
+      }
+      // Create the list element:
+      var list = document.createElement('messageListDiv'); 
+      list.setAttribute('class', 'ul2');
+      for(var i = 0; i < array.length; i++) {
+          // Create the list item:
+          var item = document.createElement('container');
+          item.setAttribute('class', 'container');
+          // Set its contents:
+
+          var message = document.createElement('container');
+          message.setAttribute('class', 'message');
+          message.innerHTML = array[i].message
+          var sender = document.createElement('container');
+          sender.setAttribute('class', 'sender');
+          sender.innerHTML = array[i].name + "#" + array[i].timeStamp;
+
+          item.appendChild(message);
+          item.appendChild(sender);
+
+          // Add it to the list:
+          list.appendChild(item);
+      }
+      // Finally, return the constructed list:
+      return list;
+  }
+
+  // 4. This will be called after the response is received
+  xhr.onreadystatechange = function() {
+    document.getElementById('foo').innerHTML = ""
+    var myArr = JSON.parse(this.responseText);
+    document.getElementById('foo').appendChild(makeUL(myArr));
+
+
+  } 
+
+  xhr.onerror = function() {
+    alert("Request failed!");
+  };
+
+  return false; 
 }
+
+handleReload();
 </script>
 
-<form onSubmit="return handleClick()">
-  First name:<br>
-  <input type="text" name="firstname" value="Mickey">
-  <br>
-  Last name:<br>
-  <input type="text" name="lastname" value="Mouse">
-  <br><br>
-  <input type="submit" value="Submit">
-</form> 
+<div class="row">
+  <div class="column">
+ 
+    <h2>Send a Message</h2>
+    <form onSubmit="return handleClick()">
+    Name:<br>
+    <input type="text" id="nameInput" name="Name" value="Unknown">
+    <br>
+    Message:<br>
+    <input type="text" id="messageInput" name="Message" value="Hi!">
+    <br><br>
+    <input type="submit" value="Submit">
+    </form> 
+    <p id="sendMessageStatus"></p>
+    
+  </div>
+  <div class="column">
+    <h2>Messages</h2>
+    <p id="messageBoard"></p>
+    <div id="foo"></div>
+    <button type="button" onclick="handleReload()">Reload</button>
+  </div>
+</div>
+
+
+</body>
+
+</html>
