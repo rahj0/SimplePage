@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <link rel="stylesheet" type="text/css" href="myStyle.css">
+    <link rel="shortcut icon" href="">
+</head>
+<body  >
+<div >
+    <h1 style="margin:0;" id="app">London Temperature</h1>
+    <a id="temp">No temperature available.</a>
+</div>
+
+<script type="text/javascript">
+
+  var address = 'https://18.130.134.206/tempapi'
+
+
+  function handleReload() {
+
+  // 1. Create a new XMLHttpRequest object
+  let xhr = new XMLHttpRequest();
+
+  // 2. Configure it: GET-request for the URL /article/.../load
+  xhr.open('GET', address + '/TempItems', true);
+
+  xhr.setRequestHeader('X-PINGOTHER', 'pingpong');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  // 3. Send the request over the network
+  xhr.send(JSON.stringify());
+
+  // 4. This will be called after the response is received
+  xhr.onreadystatechange = function() {
+    var responseObj = JSON.parse(this.responseText);
+    var temp = (parseFloat(responseObj.value)+1)  / 100.0
+    document.getElementById('temp').innerHTML = temp + " &#x2103;"
+
+
+  } 
+
+  xhr.onerror = function() {
+    alert("Request failed!");
+  };
+
+  return false; 
+}
+
+handleReload();
+</script>
+
+</body>
+
+</html>
